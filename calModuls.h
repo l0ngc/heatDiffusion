@@ -1,7 +1,6 @@
 //
 // Created by 程龙 on 2022-10-15.
 //
-
 #ifndef UNTITLED1_CALMODULS_H
 #define UNTITLED1_CALMODULS_H
 
@@ -9,23 +8,27 @@
 #include "iostream"
 
 using namespace std;
-void diffuse(int posX, int posY, float ** nowMatrix, float ** nextMatrix, float constant)
+
+void diffuse(int posX, int posY, int rows, int cols, float * nowMatrix, float * nextMatrix, float constant)
 {
     // h(i, j) = h(i, j) + c * ((h(i - 1, j) + h(i + 1, j) + h(i, j - 1) + h(i, j + 1)) / 4 - h(i,j))
-    float tmpVal = nowMatrix[posX][posY];
-    float surrounding =  (nowMatrix[posX - 1][posY] +
-                          nowMatrix[posX + 1][posY] +
-                          nowMatrix[posX][posY - 1] +
-                          nowMatrix[posX][posY + 1]) / 4 - tmpVal;
+    float tmpVal = nowMatrix[posX * cols + posY];
+
+    float surrounding =  (nowMatrix[posX * cols + posY - 1] +
+                          nowMatrix[posX * cols + posY + 1] +
+                          nowMatrix[(posX - 1) * cols  + posY] +
+                          nowMatrix[(posX + 1) * cols  + posY]) / 4 - tmpVal;
+
     float nextValue =  tmpVal + constant * surrounding;
-    nextMatrix[posX][posY] = nextValue;
+
+    nextMatrix[posX * cols + posY] = nextValue;
 }
 
-float calAvg(float ** matrix, int rows, int cols){
+float calAvg(float * matrix, int rows, int cols){
     long double sum = 0;
     for (int i = 1; i < rows + 1; ++i) {
         for (int j = 1; j < cols + 1; ++j) {
-            sum += matrix[i][j];
+            sum += matrix[i * cols + j];
         }
     }
 
@@ -34,11 +37,11 @@ float calAvg(float ** matrix, int rows, int cols){
     return matrixAvg;
 }
 
-float calAvgDiff(float ** matrix, float avg, int rows, int cols){
+float calAvgDiff(float * matrix, float avg, int rows, int cols){
     long double avgDiff = 0;
     for (int i = 1; i < rows + 1; ++i) {
         for (int j = 1; j < cols + 1; ++j) {
-            avgDiff += abs(avg - matrix[i][j]);
+            avgDiff += abs(avg - matrix[i * cols + j]);
         }
     }
 

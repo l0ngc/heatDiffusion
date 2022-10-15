@@ -4,7 +4,6 @@
 #include "outMatrix.h"
 #include "calModuls.h"
 #include "initMatrix.h"
-using namespace std;
 /* TODO：
  * 1. 读取运行脚本指令，来设置所需要的参数
  * 2. 读取目标文件，来初始化数组
@@ -14,25 +13,29 @@ using namespace std;
  * 4. 计算平均温度
  * 5. 进行输出
 */
-
+// 做出一个一个维度的版本，一个维度的话怎么来处理边界值呢
+void diffuse(int posX, int posY, float * nowMatrix, float * nextMatrix, float constant);
 
 int main(int argc, char *argv[]) {
 // 修改为argv[0]以及转换数据类型
-    int iterations = 100;
-    float constant = 0.01;
+    int iterations = 1;
+    float constant = 0.0333333;
 
-    const int rows = 100;
-    const int cols = 100;
+    const int rows = 5;
+    const int cols = 5;
 
-    int initX = 50;
-    int initY = 50;
+    int initX = 2;
+    int initY = 2;
 
     float initVal = 1000000;
-    // 矩阵扩增一圈，并只处理这一圈以内对数据
-    float ** heatMatrix = mallocArray(rows + 2, cols + 2);
-    float ** nextMatrix = mallocArray(rows + 2, cols + 2);
 
-    heatMatrix[initX + 1][initY + 1] = initVal;
+    float *nowMatrix;
+    float *nextMatrix;
+
+    nowMatrix = (float*) malloc(sizeof(float) * (rows + 2) * (cols + 2));
+    nextMatrix = (float*) malloc(sizeof(float) * (rows + 2) * (cols + 2));
+
+    nowMatrix[(initX + 1) * cols + initY + 1] = initVal;
 
     // iterations
     for (int it = 0; it < iterations; ++it) {
@@ -40,15 +43,20 @@ int main(int argc, char *argv[]) {
         for (int i = 1; i < rows + 1; ++i) {
             // cols
             for (int j = 1; j < cols + 1; ++j) {
-                diffuse(i, j, heatMatrix, nextMatrix, constant);
+                diffuse(i, j, rows, cols, nowMatrix, nextMatrix, constant);
             }
         }
         // transfer
-        heatMatrix = nextMatrix;
+//        heatMatrix = nextMatrix;
     }
 
     // print matrix
-    outMatrix(nextMatrix, rows, cols);
+    for (int i = 1; i < rows + 1; ++i) {
+        for (int j = 1; j < cols + 1; ++j) {
+            std::cout << nextMatrix[i * cols + j] << "\t\t";
+        }
+        std::cout << " " << std::endl;
+    }
 
     // cal average temperature
     float matrixAvg = calAvg(nextMatrix, rows, cols);
@@ -58,6 +66,7 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+
 
 
 
