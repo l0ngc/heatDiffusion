@@ -8,7 +8,7 @@
 #include "iostream"
 
 using namespace std;
-
+void diffuse(int posX, int posY, float * nowMatrix, float * nextMatrix, float constant);
 void diffuse(int posX, int posY, int rows, int cols, float * nowMatrix, float * nextMatrix, float constant)
 {
     // h(i, j) = h(i, j) + c * ((h(i - 1, j) + h(i + 1, j) + h(i, j - 1) + h(i, j + 1)) / 4 - h(i,j))
