@@ -21,6 +21,7 @@ __global__ void gpu_diffuse(const float * nowMatrix, float * nextMatrix, int row
     // every block share same memory
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
+
     int wholeCol = cols + 2;
     float tmpVal = nowMatrix[row * wholeCol + col];
 

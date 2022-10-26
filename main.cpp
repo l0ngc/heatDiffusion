@@ -40,12 +40,14 @@ int main(int argc, char *argv[]) {
     // iterations
     for (int it = 0; it < iterations; ++it) {
         // rows
+
         for (int i = 1; i < rows + 1; ++i) {
             // cols
             for (int j = 1; j < cols + 1; ++j) {
                 diffuse(i, j, rows, cols, nowMatrix, nextMatrix, constant);
             }
         }
+
         // transfer
 //        heatMatrix = nextMatrix;
     }
